@@ -28,7 +28,8 @@ router.post("/", async (req, res) => {
 
     console.log(uploadedImage.secure_url);
     const newFeedback = await Feedback.create({
-      feedbackImage: uploadedImage.secure_url,
+      imageUrl: uploadedImage.secure_url,
+      publicId: uploadedImage.public_id,
     });
 
     res.json({ msg: "feedback correctly added", feedback: newFeedback });
@@ -72,12 +73,39 @@ router.delete("/:id", async (req, res, next) => {
       return res.status(404).send("Artwork not found");
     }
 
+    await cloudinary.uploader.destroy(feedback.publicId, {});
+
     await feedback.destroy();
 
     res.send({ message: "feedback deleted", id });
   } catch (e) {
     console.log(e);
     return res.status(500).send({ message: "Something went wrong, sorry" });
+  }
+});
+
+// GET artworks with bids by id.
+router.put("/:id/enabled", async (req, res) => {
+  const { id } = req.params;
+
+  console.log(id);
+  if (isNaN(parseInt(id))) {
+    return res.status(400).send({ message: "Feedback id is not a number" });
+  }
+  try {
+    const feedback = await Feedback.findByPk(id);
+
+    if (!feedback) {
+      return res.status(404).send({ message: "Feedback not found" });
+    }
+    const enabled = !feedback.enabled;
+
+    await feedback.update({ enabled: enabled });
+
+    res.status(200).send({ message: "ok", feedback });
+  } catch (error) {
+    console.log(error);
+    return res.status(503).send({ message: "Something went wrong, sorry" });
   }
 });
 

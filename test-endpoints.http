@@ -5,10 +5,13 @@
 ### GET feedbacks with bids
 GET  {{server}}/feedbacks
 
-
 ### GET feedbacks with by id
 GET  {{server}}/feedbacks/2
 
-### delete artworks with by id
-DELETE {{server}}/feedbacks/2
-Authorization: Bearer {{bearer}}
+### delete feedbacks with by id
+DELETE {{server}}/feedbacks/3
+# Authorization: Bearer {{bearer}}
+
+### enabled feedback to be shown
+PUT {{server}}/feedbacks/4/enabled
+# Authorization: Bearer {{bearer}}

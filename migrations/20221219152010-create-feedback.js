@@ -9,8 +9,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      feedbackImage: {
+      imageUrl: {
         type: Sequelize.STRING,
+      },
+      publicId: {
+        type: Sequelize.STRING,
+      },
+      enabled: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
