@@ -1,0 +1,14 @@
+
+@server = http://localhost:4000
+
+@bearer = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImlhdCI6MTY2OTkyMzAwOCwiZXhwIjoxNjY5OTMwMjA4fQ.lLagCV8EF8EHbQOjAvMzzI3LBN-Mr6QB0yJ4v0loE-U
+### GET feedbacks with bids
+GET  {{server}}/feedbacks
+
+
+### GET feedbacks with by id
+GET  {{server}}/feedbacks/2
+
+### delete artworks with by id
+DELETE {{server}}/feedbacks/2
+Authorization: Bearer {{bearer}}
