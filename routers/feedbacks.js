@@ -21,6 +21,7 @@ router.post("/", async (req, res) => {
   try {
     const { image } = req.body;
 
+    console.log("sending file to cloudinary");
     const uploadedImage = await cloudinary.uploader.upload(image, {
       upload_preset: "Homepage",
       allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],

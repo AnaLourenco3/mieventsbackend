@@ -21,13 +21,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      mainImage: {
+      mainImageUrl: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       categoryId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      publicId: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

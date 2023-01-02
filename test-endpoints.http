@@ -2,7 +2,7 @@
 @server = http://localhost:4000
 
 @bearer = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjgsImlhdCI6MTY2OTkyMzAwOCwiZXhwIjoxNjY5OTMwMjA4fQ.lLagCV8EF8EHbQOjAvMzzI3LBN-Mr6QB0yJ4v0loE-U
-### GET feedbacks with bids
+### GET feedbacks 
 GET  {{server}}/feedbacks
 
 ### GET feedbacks with by id
@@ -15,3 +15,33 @@ DELETE {{server}}/feedbacks/3
 ### enabled feedback to be shown
 PUT {{server}}/feedbacks/4/enabled
 # Authorization: Bearer {{bearer}}
+
+### GET categories
+GET  {{server}}/categories
+
+### Post new Blog Post
+
+POST {{server}}/blogs
+Content-Type: application/json
+
+{
+  "date": "27/12/2022",
+  "title": "Me&you&her",
+  "text": "Lorem Ipsum",
+  "mainImage": "https://images.unsplash.com/photo-1519741497674-611481863552?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+  "publicId": "1",
+  "categoryId": 1
+}
+
+### Get all blogs
+GET  {{server}}/blogs
+# GET  {{server}}/blogs?categoryId=1
+
+
+
+### Get blogs with categories
+GET  {{server}}/categories/1/blogs/
+
+### Delete blog
+
+DELETE {{server}}/blogs/5

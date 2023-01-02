@@ -9,13 +9,16 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      image: {
+      imagesUrl: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       blogId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      publicId: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
