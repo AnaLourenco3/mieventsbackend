@@ -33,8 +33,8 @@ Content-Type: application/json
   "categoryId": 1
 }
 
-### Get all blogs
-GET  {{server}}/blogs
+### Get all categories
+GET  {{server}}/categories
 # GET  {{server}}/blogs?categoryId=1
 
 
@@ -45,3 +45,19 @@ GET  {{server}}/categories/1/blogs/
 ### Delete blog
 
 DELETE {{server}}/blogs/5
+
+### Update blog
+
+GET {{server}}/blogs/1
+Content-Type: application/json
+
+### Update blog
+
+PUT {{server}}/blogs/20
+Content-Type: application/json
+
+{
+  "date": "27/12/2022",
+  "title": "Me&you&her bla bla",
+  "text": "Lorem Ipsum"
+}

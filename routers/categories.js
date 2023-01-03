@@ -30,7 +30,9 @@ router.get("/:id/blogs", async (req, res) => {
       include: [BlogData],
       order: [[BlogData, "createdAt", "DESC"]],
     });
-    res.status(200).send({ message: "ok", blogs: category.blogData });
+    const blogs = category.blogData;
+    delete category.dataValues.blogData;
+    res.status(200).send({ message: "ok", blogs, category });
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: "Something went wrong, sorry" });

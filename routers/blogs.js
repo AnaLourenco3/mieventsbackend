@@ -2,6 +2,7 @@ const { Router } = require("express");
 // const authMiddleware = require("../auth/middleware");
 // const BlogImages = require("../models").blogImage;
 const BlogData = require("../models").blogData;
+const BlogImages = require("../models").blogImage;
 const Category = require("../models").category;
 const cloudinary = require("../cloudinary/cloudinary");
 require("dotenv").config();
@@ -27,7 +28,9 @@ router.get("/:id", async (req, res) => {
     return res.status(400).send({ message: "blog id is not a number" });
   }
   try {
-    const blog = await BlogData.findByPk(id);
+    const blog = await BlogData.findByPk(id, {
+      include: [Category, BlogImages],
+    });
 
     if (blog === null) {
       return res.status(404).send({ message: "Blog not found" });
@@ -103,73 +106,73 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-// router.put("/:id/", async (req, res) => {
-//   const { date, title, text, mainImageUrl, publicId, categoryId } = req.body;
-//   const { id } = req.params;
+router.put("/:id/", async (req, res) => {
+  const { date, title, text, categoryId } = req.body;
+  const { id } = req.params;
 
-//   console.log(id);
-//   if (isNaN(parseInt(id))) {
-//     return res.status(400).send({ message: "Blog id is not a number" });
-//   }
-//   try {
-//     const blogData = await BlogData.findByPk(id);
+  console.log(id);
+  if (isNaN(parseInt(id))) {
+    return res.status(400).send({ message: "Blog id is not a number" });
+  }
+  try {
+    const category = await Category.findByPk(categoryId);
+    if (!category) {
+      return res.status(404).send({ message: "Can't find that category" });
+    }
 
-//     if (!blogData) {
-//       return res.status(404).send({ message: "Blog not found" });
-//     }
+    const blogData = await BlogData.findByPk(id);
 
-//     console.log("sending file to cloudinary");
-//     const uploadedImage = await cloudinary.uploader.upload(mainImageUrl, {
-//       upload_preset: "Homepage",
-//       allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
-//     });
+    if (!blogData) {
+      return res.status(404).send({ message: "Blog not found" });
+    }
 
-//     await BlogData.update({
-//       date,
-//       title,
-//       text,
-//       mainImageUrl: uploadedImage.secure_url,
-//       publicId: uploadedImage.public_id,
-//       categoryId: category.id,
-//     });
+    await blogData.update({
+      date,
+      title,
+      text,
+      categoryId,
+    });
 
-//     res.status(200).send({ message: "ok", blogData });
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(503).send({ message: "Something went wrong, sorry" });
-//   }
-// });
+    res.status(200).send({ message: "ok", blogData });
+  } catch (error) {
+    console.log(error);
+    return res.status(503).send({ message: "Something went wrong, sorry" });
+  }
+});
 
-// router.post("/", async (req, res) => {
-//   const { images } = req.body;
-//   const uploadedImgs = images.map(async (image) => {
-//     const upload = await cloudinary.uploader.upload(
-//       image,
-//       {
-//         upload_preset: "unsigned_upload",
-//         allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
-//       },
-//       function (error, result) {
-//         if (error) {
-//           console.log(error);
-//         }
-//       }
-//     );
-//     return upload;
-//   });
+router.post("/:blogId/images", async (req, res) => {
+  const { blogId } = req.params;
 
-//   try {
-//     const fulfilled = await Promise.all(uploadedImgs).then((values) => {
-//       return values;
-//     });
-//     const publicIds = fulfilled.map((image) => {
-//       return image.public_id;
-//     });
-//     console.log(publicIds);
-//     res.status(200).json(publicIds);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
+  if (isNaN(parseInt(blogId))) {
+    return res.status(400).send({ message: "Blog id is not a number" });
+  }
+  try {
+    const { image } = req.body;
+
+    const blogData = await BlogData.findByPk(blogId);
+
+    if (!blogData) {
+      return res.status(404).send({ message: "Blog not found" });
+    }
+
+    console.log("sending file to cloudinary");
+    const uploadedImage = await cloudinary.uploader.upload(image, {
+      upload_preset: "Homepage",
+      allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
+    });
+
+    console.log(uploadedImage.secure_url);
+    const newImageBlog = await BlogImages.create({
+      blogId,
+      imagesUrl: uploadedImage.secure_url,
+      publicId: uploadedImage.public_id,
+    });
+
+    res.json({ msg: "images correctly added", image: newImageBlog });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ err: "Something went wrong" });
+  }
+});
 
 module.exports = router;
