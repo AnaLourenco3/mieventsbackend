@@ -2,35 +2,18 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("blogData", {
+    await queryInterface.createTable("videoUrls", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      date: {
+      videoUrl: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
-      title: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      text: {
-        type: Sequelize.STRING(10000),
-        allowNull: true,
-      },
-      mainImageUrl: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      categoryId: {
+      blogId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      publicId: {
-        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -45,6 +28,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("blogData");
+    await queryInterface.dropTable("videoUrls");
   },
 };

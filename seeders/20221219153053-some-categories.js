@@ -112,7 +112,7 @@ module.exports = {
         },
 
         {
-          name: "Tutorial",
+          name: "Diy",
           quote: "",
           description:
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed in nibh vel lacus imperdiet luctus in quis ante. Phasellus sit amet ultrices nisl. Vivamus non erat velit. Duis condimentum congue dolor vel iaculis. Etiam tincidunt interdum nisi, sit amet rutrum neque sollicitudin quis. Duis eu porttitor mauris. Nulla efficitur metus urna, eu scelerisque risus pulvinar eget. Aenean tortor arcu, porttitor non consectetur id, convallis vel arcu. Cras ornare posuere tortor, quis gravida nisi bibendum sed. Nullam non orci elit. Maecenas id mauris eros.",

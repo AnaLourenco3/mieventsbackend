@@ -30,6 +30,7 @@ router.get("/:id", async (req, res) => {
   try {
     const blog = await BlogData.findByPk(id, {
       include: [Category, BlogImages],
+      // order: [[BlogData, "updatedAt", "DESC"]],
     });
 
     if (blog === null) {
@@ -45,9 +46,9 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   // console.log(req.body);
-  const { date, title, text, mainImage, categoryId } = req.body;
+  const { date, title, text, mainImage, videoUrl, categoryId } = req.body;
 
-  if (!date || !title || !text || !mainImage || !categoryId) {
+  if (!date || !title || !categoryId) {
     return res.status(400).send({
       message:
         "To post you need to specify a date, title, a text, a main image url, and a categoryId",
@@ -61,17 +62,20 @@ router.post("/", async (req, res) => {
     }
 
     console.log("sending file to cloudinary");
-    const uploadedImage = await cloudinary.uploader.upload(mainImage, {
-      upload_preset: "Homepage",
-      allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
-    });
-
+    let uploadedImage;
+    if (mainImage) {
+      uploadedImage = await cloudinary.uploader.upload(mainImage, {
+        upload_preset: "Homepage",
+        allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
+      });
+    }
     const newBlogPost = await BlogData.create({
       date,
       title,
       text,
-      mainImageUrl: uploadedImage.secure_url,
-      publicId: uploadedImage.public_id,
+      mainImageUrl: uploadedImage?.secure_url,
+      videoUrl,
+      publicId: uploadedImage?.public_id,
       categoryId: category.id,
     });
 
@@ -106,8 +110,8 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-router.put("/:id/", async (req, res) => {
-  const { date, title, text, categoryId } = req.body;
+router.put("/:id", async (req, res) => {
+  const { date, title, text, categoryId, videoUrl } = req.body;
   const { id } = req.params;
 
   console.log(id);
@@ -120,7 +124,9 @@ router.put("/:id/", async (req, res) => {
       return res.status(404).send({ message: "Can't find that category" });
     }
 
-    const blogData = await BlogData.findByPk(id);
+    const blogData = await BlogData.findByPk(id, {
+      include: [BlogImages],
+    });
 
     if (!blogData) {
       return res.status(404).send({ message: "Blog not found" });
@@ -131,6 +137,7 @@ router.put("/:id/", async (req, res) => {
       title,
       text,
       categoryId,
+      videoUrl,
     });
 
     res.status(200).send({ message: "ok", blogData });
@@ -172,6 +179,40 @@ router.post("/:blogId/images", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ err: "Something went wrong" });
+  }
+});
+
+router.put("/:id/main-image", async (req, res) => {
+  const { mainImage } = req.body;
+  const { id } = req.params;
+
+  console.log(id);
+  if (isNaN(parseInt(id))) {
+    return res.status(400).send({ message: "Blog id is not a number" });
+  }
+  try {
+    const blogData = await BlogData.findByPk(id);
+
+    if (!blogData) {
+      return res.status(404).send({ message: "Blog not found" });
+    }
+
+    await cloudinary.uploader.destroy(blogData.publicId, {});
+
+    const uploadedImage = await cloudinary.uploader.upload(mainImage, {
+      upload_preset: "Homepage",
+      allowed_formats: ["png", "jpg", "jpeg", "svg", "ico", "jfif", "webp"],
+    });
+
+    await blogData.update({
+      mainImageUrl: uploadedImage.secure_url,
+      publicId: uploadedImage.public_id,
+    });
+
+    res.status(200).send({ message: "ok", blogData });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ message: "Something went wrong, sorry" });
   }
 });
 

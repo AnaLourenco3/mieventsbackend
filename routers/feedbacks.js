@@ -40,7 +40,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET artworks with bids by id.
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -85,7 +84,6 @@ router.delete("/:id", async (req, res, next) => {
   }
 });
 
-// GET artworks with bids by id.
 router.put("/:id/enabled", async (req, res) => {
   const { id } = req.params;
 

@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       blogData.belongsTo(models.category, { foreignKey: "categoryId" });
       blogData.hasMany(models.blogImage, { foreignKey: "blogId" });
+      blogData.hasMany(models.videoUrl, { foreignKey: "blogId" });
     }
   }
   blogData.init(
@@ -18,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       text: DataTypes.STRING,
       mainImageUrl: DataTypes.STRING,
+      videoUrl: DataTypes.STRING,
       categoryId: DataTypes.INTEGER,
       publicId: DataTypes.STRING,
     },
