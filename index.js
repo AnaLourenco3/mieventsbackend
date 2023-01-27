@@ -9,12 +9,14 @@ const feedbackRouter = require("./routers/feedbacks");
 const categoryRouter = require("./routers/categories");
 const blogRouter = require("./routers/blogs");
 const imagesBlogRouter = require("./routers/images");
+const authRouter = require("./routers/auth");
 
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.static("public"));
 
+app.use("/auth", authRouter);
 app.use("/feedbacks", feedbackRouter);
 app.use("/categories", categoryRouter);
 app.use("/blogs", blogRouter);
