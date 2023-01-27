@@ -5,14 +5,14 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn(
       "categories",
-      "imageHeaderUrl",
-      { type: Sequelize.STRING(1000) },
+      "imageGridHomepageUrl",
+      { type: Sequelize.STRING },
       {}
     );
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("categories", "imageHeaderUrl", {});
+    await queryInterface.removeColumn("categories", "imageGridHomepageUrl", {});
     /**
      * Add reverting commands here.
      *
