@@ -61,3 +61,12 @@ Content-Type: application/json
   "title": "Me&you&her bla bla",
   "text": "Lorem Ipsum"
 }
+
+### login
+POST {{server}}/auth/login
+Content-Type: application/json
+
+{
+  "name": "user",
+  "password": "1234"
+}
