@@ -37,7 +37,8 @@ Content-Type: application/json
 GET  {{server}}/categories
 # GET  {{server}}/blogs?categoryId=1
 
-
+### Get category by id
+GET  {{server}}/categories/1
 
 ### Get blogs with categories
 GET  {{server}}/categories/1/blogs/
@@ -70,3 +71,4 @@ Content-Type: application/json
   "name": "user",
   "password": "1234"
 }
+
