@@ -86,7 +86,7 @@ router.get("/:id/blogs", async (req, res) => {
   try {
     const category = await Category.findByPk(id, {
       include: [BlogData],
-      order: [[BlogData, "createdAt", "DESC"]],
+      order: [[BlogData, "updatedAt", "DESC"]],
     });
     const blogs = category.blogData;
     delete category.dataValues.blogData;
