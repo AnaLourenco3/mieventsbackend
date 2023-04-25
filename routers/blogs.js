@@ -31,7 +31,7 @@ router.get("/:id", async (req, res) => {
     const blogs = await BlogData.findAll({
       include: [Category, BlogImages],
       where: {
-        category_id: id,
+        categoryId: id,
       },
       order: [[BlogData, "updatedAt", "DESC"]],
     });
