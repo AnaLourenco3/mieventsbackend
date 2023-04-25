@@ -28,21 +28,16 @@ router.get("/:id", async (req, res) => {
     return res.status(400).send({ message: "blog id is not a number" });
   }
   try {
-    const blogs = await BlogData.findAll({
+    const blog = await BlogData.findByPk(id, {
       include: [Category, BlogImages],
-      where: {
-        categoryId: id,
-      },
-      order: [[BlogData, "updatedAt", "DESC"]],
+      // order: [[BlogData, "updatedAt", "DESC"]],
     });
 
-    if (blogs.length === 0) {
-      return res
-        .status(404)
-        .send({ message: "No blogs found for the specified category" });
+    if (blog === null) {
+      return res.status(404).send({ message: "Blog not found" });
     }
 
-    res.status(200).send({ message: "ok", blogs });
+    res.status(200).send({ message: "ok", blog });
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: "Something went wrong, sorry" });
