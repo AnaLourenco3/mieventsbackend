@@ -28,21 +28,47 @@ router.get("/:id", async (req, res) => {
     return res.status(400).send({ message: "blog id is not a number" });
   }
   try {
-    const blog = await BlogData.findByPk(id, {
+    const blogs = await BlogData.findAll({
       include: [Category, BlogImages],
-      // order: [[BlogData, "updatedAt", "DESC"]],
+      where: {
+        category_id: id,
+      },
+      order: [[BlogData, "updatedAt", "DESC"]],
     });
 
-    if (blog === null) {
-      return res.status(404).send({ message: "Blog not found" });
+    if (blogs.length === 0) {
+      return res
+        .status(404)
+        .send({ message: "No blogs found for the specified category" });
     }
 
-    res.status(200).send({ message: "ok", blog });
+    res.status(200).send({ message: "ok", blogs });
   } catch (error) {
     console.log(error);
     return res.status(500).send({ message: "Something went wrong, sorry" });
   }
 });
+
+try {
+  const blogs = await BlogData.findAll({
+    include: [Category, BlogImages],
+    where: {
+      category_id: id,
+    },
+    order: [[BlogData, "updatedAt", "DESC"]],
+  });
+
+  if (blogs.length === 0) {
+    return res
+      .status(404)
+      .send({ message: "No blogs found for the specified category" });
+  }
+
+  res.status(200).send({ message: "ok", blogs });
+} catch (error) {
+  console.log(error);
+  return res.status(500).send({ message: "Something went wrong, sorry" });
+}
 
 router.post("/", async (req, res) => {
   // console.log(req.body);
