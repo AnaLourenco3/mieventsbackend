@@ -49,27 +49,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-try {
-  const blogs = await BlogData.findAll({
-    include: [Category, BlogImages],
-    where: {
-      category_id: id,
-    },
-    order: [[BlogData, "updatedAt", "DESC"]],
-  });
-
-  if (blogs.length === 0) {
-    return res
-      .status(404)
-      .send({ message: "No blogs found for the specified category" });
-  }
-
-  res.status(200).send({ message: "ok", blogs });
-} catch (error) {
-  console.log(error);
-  return res.status(500).send({ message: "Something went wrong, sorry" });
-}
-
 router.post("/", async (req, res) => {
   // console.log(req.body);
   const { date, title, text, mainImage, videoUrl, categoryId } = req.body;
