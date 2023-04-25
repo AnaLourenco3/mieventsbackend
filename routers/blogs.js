@@ -30,7 +30,7 @@ router.get("/:id", async (req, res) => {
   try {
     const blog = await BlogData.findByPk(id, {
       include: [Category, BlogImages],
-      // order: [[BlogData, "updatedAt", "DESC"]],
+      order: [["updatedAt", "DESC"]],
     });
 
     if (blog === null) {
